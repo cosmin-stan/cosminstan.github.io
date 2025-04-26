@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmin's Hacker Terminal CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Fira Code', monospace;
+      padding: 20px;
+      white-space: pre-wrap;
+    }
+    #terminal {
+      max-width: 900px;
+      margin: 0 auto;
+      min-height: 80vh;
+      white-space: pre;
+    }
+    .prompt {
+      display: flex;
+    }
+    .prompt span {
+      margin-right: 10px;
+      color: #39ff14;
+    }
+    input {
+      background: none;
+      border: none;
+      color: #00ff00;
+      outline: none;
+      width: 100%;
+      font-family: 'Fira Code', monospace;
+      font-size: 1em;
+      caret-color: #00ff00;
+      animation: blink 1s step-start infinite;
+    }
+    .error {
+      color: #ff0033;
+    }
+    @keyframes blink {
+      50% { caret-color: transparent; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="terminal"></div>
+
+<script>
+const terminal = document.getElementById('terminal');
+
+const banner = `
+------------------------------------------------------
+| You hack this... I hack your printer.               |
+| Try me. It's already printing cat memes.            |
+------------------------------------------------------
+        \              
+        |\\__/|     (\\
+        |o  o |__  ) )
+        -(---(((-------- 
+             `;
+
+function showBanner() {
+  const bannerDiv = document.createElement('div');
+  bannerDiv.textContent = banner;
+  terminal.appendChild(bannerDiv);
+}
+
+function createPrompt() {
+  const prompt = document.createElement('div');
+  prompt.className = 'prompt';
+
+  const prefix = document.createElement('span');
+  prefix.textContent = 'cosmin@terminal:~$';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+
+  input.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      handleCommand(input.value);
+      input.disabled = true;
+      createPrompt();
+    }
+  });
+
+  prompt.appendChild(prefix);
+  prompt.appendChild(input);
+  terminal.appendChild(prompt);
+  input.focus();
+}
+
+function typeText(element, text, delay = 30) {
+  let i = 0;
+  function typing() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(typing, delay);
+    }
+  }
+  typing();
+}
+
+function handleCommand(command) {
+  const output = document.createElement('div');
+  output.style.marginLeft = '20px';
+
+  switch(command.trim().toLowerCase()) {
+    case 'whoami':
+      typeText(output, 'Cosmin Stan - Cybersecurity Analyst specializing in detection engineering, cloud security, and incident response.');
+      break;
+    case 'experience':
+      typeText(output, '- SOC Analyst - Company A (2023-Present)\n- Intern - Company B (2022-2023)');
+      break;
+    case 'skills':
+      typeText(output, '- Threat Detection, SIEM (Splunk, Elastic)\n- Incident Response, Malware Analysis\n- Linux, Networking, Bash/Python');
+      break;
+    case 'projects':
+      typeText(output, '- Home SOC lab (Splunk + Elastic)\n- Threat Hunting playbook\n- Raspberry Pi security projects');
+      break;
+    case 'certs':
+      typeText(output, '- CompTIA Security+\n- Splunk Core Certified User (example)');
+      break;
+    case 'contact':
+      typeText(output, 'GitHub: https://github.com/cosmin-stan\nLinkedIn: https://linkedin.com/in/yourprofile\nEmail: you@example.com');
+      break;
+    case 'hacktheplanet':
+      typeText(output, '🔥 Initiating global hack... just kidding 😎');
+      break;
+    case 'sudo make me a sandwich':
+      typeText(output, '🛠️  Okay. You\'re the boss.');
+      break;
+    case 'clear':
+      terminal.innerHTML = '';
+      showBanner();
+      handleCommand('help');
+      break;
+    case 'help':
+      typeText(output, 'Available commands: whoami, experience, skills, projects, certs, contact, clear, help, hacktheplanet, sudo make me a sandwich');
+      break;
+    default:
+      output.className = 'error';
+      typeText(output, 'Command not found. Type "help" for available commands.');
+  }
+
+  terminal.appendChild(output);
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+// Initialize
+showBanner();
+handleCommand('help');
+createPrompt();
+</script>
+
+</body>
+</html>
